@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <title>Tickets</title>
+</head>
+
+<body>
+    <nav class="navbar">
+
+        <div class="left">
+            <div class="logo">
+                <img src="photos/sciever_logo.png" width="55px" height="55px">
+            </div>
+            <div class="hello">
+                Hello, [Client Name]!&#128075;
+            </div>
+        </div>
+
+        <div class="center">
+            <input type="text" class="search" placeholder="Search">
+            <img src="svg/search_black_24dp.svg" class="search_icon">
+        </div>
+
+        <div class="right">
+            <div class="create_button">
+                <svg class="create_icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                    width="24px" fill="#000000">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                </svg>
+
+                <div class="create">
+                    Create
+                </div>
+            </div>
+
+            <div class="notification_icon">
+                <img src="svg/notifications_black_24dp.svg" width="30" height="30">
+            </div>
+        </div>
+    </nav>
+
+    <nav class="sidebar">
+        <div class="home_icon">
+            <img src="svg/home_black_24dp.svg" width="35px" height="35px">
+
+        </div>
+
+        <div class="tickets_icon">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512"
+                style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                <g>
+                    <g>
+                        <g>
+                            <path d="M492.408,210.307C503.325,209.97,512,201.023,512,190.101v-77.338c0-11.164-9.051-20.216-20.216-20.216H20.216
+				C9.051,92.548,0,101.599,0,112.763v77.287c0,11.164,9.051,20.216,20.216,20.216c25.218,0,45.734,20.516,45.734,45.734
+				s-20.516,45.734-45.734,45.734C9.051,301.734,0,310.786,0,321.95v77.287c0,11.164,9.051,20.216,20.216,20.216h471.569
+				c11.164,0,20.216-9.051,20.216-20.216v-77.338c0-10.922-8.675-19.869-19.592-20.206c-24.836-0.767-44.29-20.837-44.29-45.693
+				S467.573,211.074,492.408,210.307z M162.745,379.02H40.431v-39.249c37.792-9.12,65.95-43.218,65.95-83.771
+				c0-40.552-28.158-74.652-65.95-83.772v-39.249h122.314V379.02z M432.049,316.025c10.997,11.315,24.617,19.251,39.521,23.217
+				v39.778H203.176V132.979h268.393v39.778c-14.904,3.966-28.524,11.903-39.521,23.217c-15.709,16.164-24.361,37.482-24.361,60.027
+				C407.686,278.544,416.339,299.861,432.049,316.025z" />
+                            <path d="M372.235,198.673H246.198c-11.164,0-20.216,9.051-20.216,20.216s9.051,20.216,20.216,20.216h126.037
+				c11.164,0,20.216-9.051,20.216-20.216S383.399,198.673,372.235,198.673z" />
+                            <path d="M372.235,272.895H246.198c-11.164,0-20.216,9.051-20.216,20.216s9.051,20.216,20.216,20.216h126.037
+				c11.164,0,20.216-9.051,20.216-20.216S383.399,272.895,372.235,272.895z" />
+                        </g>
+                    </g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+                <g>
+                </g>
+            </svg>
+
+
+        </div>
+
+        <div class="selected"></div>
+
+        <div class="logout_icon">
+            <img src="svg/logout_black_24dp.svg" width="30px" height="30px">
+        </div>
+
+
+    </nav>
+
+    <div class="container">
+        <div class="responsive-table">
+            <section class="day-section-sunday">
+                <h2 class="day-content head">Sunday</h2>
+                <p class="day-content recipe">Recipe for Sunday</p>
+                <p class="day-content url">URL for Sunday</p>
+                <p class="day-content notes">Notes for Sunday</p>
+            </section>
+
+            <section class="day-section-monday">
+                <h2 class="day-content head">Monday</h2>
+                <p class="day-content recipe">Recipe for Monday</p>
+                <p class="day-content url">URL for Monday</p>
+                <p class="day-content notes">Notes for Monday</p>
+            </section>
+
+            <section class="day-section-tuesday">
+                <h2 class="day-content head">Tuesday</h2>
+                <p class="day-content recipe">Recipe for Tuesday</p>
+                <p class="day-content url">URL for Tuesday</p>
+                <p class="day-content notes">Notes for Tuesday</p>
+            </section>
+
+            <section class="day-section-wednesday">
+                <h2 class="day-content head">Wednesday</h2>
+                <p class="day-content recipe">Recipe for Wednesday</p>
+                <p class="day-content url">URL for Wednesday</p>
+                <p class="day-content notes">Notes for Wednesday</p>
+            </section>
+
+            <section class="day-section-thursday">
+                <h2 class="day-content head">Thursday</h2>
+                <p class="day-content recipe">Recipe for Thursday</p>
+                <p class="day-content url">URL for Thursday</p>
+                <p class="day-content notes">Notes for Thursday</p>
+            </section>
+
+            <section class="day-section-friday">
+                <h2 class="day-content head">Friday</h2>
+                <p class="day-content recipe">Recipe for Friday</p>
+                <p class="day-content url">URL for Friday</p>
+                <p class="day-content notes">Notes for Friday</p>
+            </section>
+
+            <section class="day-section-saturday">
+                <h2 class="day-content head">Saturday</h2>
+                <p class="day-content recipe">Recipe for Saturday</p>
+                <p class="day-content url">URL for Saturday</p>
+                <p class="day-content notes">Notes for Saturday</p>
+            </section>
+        </div> 
+
+
+    </div>
+
+
+
+</body>
+
+</html>

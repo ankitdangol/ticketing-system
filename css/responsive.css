@@ -1,0 +1,317 @@
+body {
+    background-color: #EAF0FF;
+    font-family: 'Mulish', sans-serif;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+
+    top: 0;
+    left: 8px;
+    right: 0;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #EAF0FF;
+
+
+}
+
+.left {
+    display: flex;
+    width: 295px;
+
+}
+
+.logo {
+
+    margin-right: 25px;
+}
+
+.hello {
+    margin-top: 12px;
+    
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.center {
+    display: flex;
+    width: 350px;
+    height: 35px;
+    background-color: white;
+    border-radius: 25px;
+    margin-top: 8px;
+
+
+
+}
+
+.search {
+    width: 295px;
+    height: 25px;
+    border: none;
+
+    margin-top: 5px;
+    margin-left: 15px;
+    outline: none;
+
+}
+
+.search_icon {
+    width: 20px;
+    height: 20px;
+    margin-top: 8px;
+    margin-right: 12px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.right {
+    display: flex;
+    justify-content: end;
+    width: 231px;
+    padding-right: 64px;
+}
+
+.create_button {
+    display: flex;
+    background-color: #1F1C2E;
+    width: 80px;
+    height: 32px;
+    border-radius: 25px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.create_icon {
+    fill: white;
+    margin-top: 4px;
+    margin-left: 5px;
+}
+
+.create {
+    color: white;
+    margin-left: 2px;
+    margin-top: 7px;
+
+    font-size: small;
+    font-weight: 600;
+}
+
+.notification_icon {
+    margin-top: 11px;
+    margin-left: 6px;
+    cursor: pointer;
+}
+
+.sidebar {
+    display: flex;
+
+    flex-direction: column;
+    margin-top: 120px;
+    position: fixed;
+    top: 0;
+    left: 7px;
+
+    bottom: 0;
+}
+
+.home_icon {
+    margin-left: 9px;
+    cursor: pointer;
+}
+
+.tickets_icon {
+    width: 30px;
+    height: 30px;
+    fill: white;
+    margin-left: 11px;
+    margin-top: 25px;
+    z-index: 1;
+
+}
+
+.selected {
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    background-color: #1F1C2E;
+    border-radius: 25px;
+    top: 54px;
+    left: 1px;
+
+
+
+
+}
+
+.logout_icon {
+    margin-left: 12px;
+    margin-top: 343px;
+    cursor: pointer;
+
+}
+
+.container {
+    background-color: white;
+    position: fixed;
+    left: 68px;
+    top: 70px;
+    right: 55px;
+    bottom: 0px;
+    border-radius: 25px 25px 0 0;
+
+}
+
+table {
+    padding: 35px 45px 0px 45px;
+    border-spacing: 0px;
+
+
+}
+
+
+
+table thead {
+
+    
+    font-size: small;
+    font-weight: bolder;
+    color: rgba(0, 0, 0, 0.5);
+    height: 25px;
+
+}
+
+
+
+
+
+
+table tbody tr td:nth-child(1) {
+
+    font-size: small;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+}
+
+table tbody tr td {
+
+
+    font-size: small;
+    font-weight: 600;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: rgb(241, 241, 241);
+    border-color: rgb(241, 241, 241);
+
+}
+
+
+
+.button {
+    display: flex;
+    background-color: black;
+    width: 70px;
+    height: 30px;
+    border-radius: 8px;
+    color: white;
+    align-items: center;
+    justify-content: center;
+
+    font-size: smaller;
+    font-weight: bolder;
+    cursor: pointer;
+    text-align: center;
+}
+
+.bug {
+    background-color: black;
+}
+
+.low {
+
+    background-color: #93A795;
+
+}
+
+.tested {
+
+    background-color: #00800D;
+
+}
+
+.feature {
+
+    background-color: #A142FF;
+
+}
+
+.medium {
+
+    background-color: #FEC400;
+
+}
+
+.in_progress {
+
+    background-color: #FB7800;
+
+}
+
+tbody tr {
+    height: 50px;
+    border-bottom: black;
+
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+
+}
+
+tr td img {
+    cursor: pointer;
+}
+
+.bodyclass {
+    padding: 1rem;
+}
+
+.responsive-table {
+    display: block;
+    margin: 40px 40px 0px 40px;
+}
+
+[class^="day-section"] {
+    margin-bottom: 1rem;
+}
+
+.day-content {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    margin: -1px 0 0 -1px;
+    box-sizing: border-box;
+}
+
+p.day-content:hover {
+    background: #c8f1c5;
+}
+
+.head {
+    background: #eaeaea;
+    font-size: 1.25rem;
+}
+
+@media (min-width: 800px) {
+    .responsive-table {
+        display: flex;
+    }
+    [class^="day-section"] {
+        flex-grow: 1;
+    }
+}
