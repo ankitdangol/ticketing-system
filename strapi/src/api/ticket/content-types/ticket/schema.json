@@ -1,0 +1,94 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tickets",
+  "info": {
+    "singularName": "ticket",
+    "pluralName": "tickets",
+    "displayName": "Ticket",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ticket_id": {
+      "type": "uid",
+      "required": false
+    },
+    "attachment": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "bug",
+        "task",
+        "feature"
+      ],
+      "required": true
+    },
+    "priority": {
+      "type": "enumeration",
+      "enum": [
+        "highest",
+        "high",
+        "medium",
+        "low"
+      ],
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "backlog",
+        "todo",
+        "in progress",
+        "pr",
+        "pr done",
+        "done",
+        "tested",
+        "passed",
+        "redo"
+      ],
+      "required": false
+    },
+    "assignee": {
+      "type": "enumeration",
+      "enum": [
+        "assignee_1",
+        "assignee_2",
+        "assignee_3"
+      ],
+      "required": false
+    },
+    "creator": {
+      "type": "string",
+      "required": false
+    },
+    "due_date": {
+      "type": "date",
+      "required": false
+    },
+    "estimate": {
+      "type": "string",
+      "required": false
+    },
+    "description": {
+      "type": "text",
+      "required": true,
+      "minLength": 1
+    },
+    "chats": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::chat.chat",
+      "mappedBy": "ticket"
+    }
+  }
+}
