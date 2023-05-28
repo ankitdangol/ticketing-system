@@ -1,36 +1,28 @@
-import Box from '@mui/material/Box';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Pills from '../Pills';
 import TableIcons from './TableIcons';
-import { Typography, Dialog, DialogContent, InputAdornment, Button, Stack, TextField, Select, MenuItem, SelectChangeEvent, InputLabel, FormControl } from '@mui/material';
+import { Box, Typography, Dialog, DialogContent, InputAdornment, Button, Stack, TextField, Select, MenuItem, SelectChangeEvent, InputLabel, FormControl } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { useEffect, useState, useContext } from 'react';
-import { RefreshContext } from '../../App';
+import { useState, useContext } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
+import Filter from '../Filter';
+import { DataContext } from '../../pages/TicketsPage';
+import { RefreshContext } from '../../App';
+import ViewAttachments from './ViewAttachments';
 
 const TicketsTable = () => {
+
+    const { data, setData } = useContext(DataContext);
 
     const { refresh, setRefresh } = useContext(RefreshContext);
 
     const toggleRefresh = () => {
         refresh == true ? setRefresh(false) : setRefresh(true)
     }
-
-    const [data, setData] = useState<any>();
-
-    useEffect(() => {
-        fetch('http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc')
-            .then((resp) => resp.json())
-            .then((apiData) => {
-                setData(apiData.data);
-            });
-    }, [refresh]);
-
-    // console.log(data);
 
     const getTickets = (ticket: any) => {
         return ticket.attributes;
@@ -41,8 +33,6 @@ const TicketsTable = () => {
     }
 
     const tickets = data?.length > 0 ? data.map(getTickets) : 'undefined';
-
-    // console.log(tickets);
 
     const [open, setOpen] = useState(false);
 
@@ -164,22 +154,6 @@ const TicketsTable = () => {
 
     }
 
-    const [imageOpen, setImageOpen] = useState(false);
-
-    const [imageToOpen, setImageToOpen] = useState('');
-
-    const handleImageOpen = () => {
-        setImageOpen(true);
-    };
-
-    const handleImageClose = () => {
-        setImageOpen(false);
-    };
-
-    const handleImageToOpen = (imageUrl: string) => {
-        setImageToOpen(imageUrl)
-    }
-
     function generateRowId() {
         const length = 8,
             charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -204,38 +178,43 @@ const TicketsTable = () => {
         {
             field: 'description',
             renderHeader: () => {
-                return <Typography fontWeight='bold'>Description</Typography>
+                return (
+                    <Typography fontWeight='bold'>Description</Typography>
+                )
             },
-            width: 300,
+            width: 380,
             editable: false,
             sortable: false
         },
         {
             field: 'attachment',
             renderHeader: () => {
-                return <Typography fontWeight='bold'>Attachment/s</Typography>
+                return <Typography fontWeight='bold'>Attachment(s)</Typography>
             },
-            width: 250,
+            headerAlign: 'center',
+            width: 170,
             editable: false,
             sortable: false,
+            align: 'center',
             renderCell: row => {
                 const url = row?.row?.attachment?.data?.length > 0 ? row.row.attachment.data.map(getUrl) : 'undefined'
+
+                const getImages = (ticket: any) => {
+                    return `http://localhost:1337${ticket.attributes.url}`;
+                }
+
+                const images = row?.row?.attachment?.data?.length > 0 ? row.row.attachment.data.map(getImages) : ''
+
                 return (
-                    <Box display='flex' gap='10px' alignItems='center'>
+                    <>
                         {url != 'undefined' ?
-                            url.map((imageUrl: string) => {
-                                return (
-                                    <>
-                                        {/* <Box sx={{ cursor: 'pointer' }}> */}
-                                        <img src={`http://localhost:1337${imageUrl}`} key={url} alt='' width='45%' height='45%' onClick={() => { handleImageOpen(); handleImageToOpen(imageUrl) }} />
-                                        {/* </Box> */}
-                                    </>
-                                )
-                            })
+                            <ViewAttachments url={url} images={images} />
                             :
-                            ''
+                            <Box display='flex' justifyContent='center' alignItems='center'>
+                                <Typography align='center'>-</Typography>
+                            </Box>
                         }
-                    </Box>
+                    </>
                 )
             }
         },
@@ -331,182 +310,22 @@ const TicketsTable = () => {
         }
     ];
 
-    const [filterType, setFilterType] = useState('');
-
-    const sortType = (event: SelectChangeEvent) => {
-        setFilterType(event.target.value as string);
-    };
-
-    const [filterPriority, setFilterPriority] = useState('');
-
-    const sortPriority = (event: SelectChangeEvent) => {
-        setFilterPriority(event.target.value as string);
-    };
-
-    const [filterStatus, setFilterStatus] = useState('');
-
-    const sortStatus = (event: SelectChangeEvent) => {
-        setFilterStatus(event.target.value as string);
-    };
-
-    const filter = () => {
-        if (filterType == '' && filterPriority == '' && filterStatus == '') {
-            fetch('http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc')
-                .then((resp) => resp.json())
-                .then((apiData) => {
-                    setData(apiData.data);
-                });
-        }
-        else if (filterType != '' && filterPriority == '' && filterStatus == '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}`)
-                .then((resp) => resp.json())
-                .then((apiData) => {
-                    console.log(apiData);
-                    setData(apiData.data);
-                });
-        }
-        else if (filterType == '' && filterPriority != '' && filterStatus == '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[priority][$eq]=${filterPriority}`)
-                .then((resp) => resp.json())
-                .then((apiData) => {
-                    console.log(apiData);
-                    setData(apiData.data);
-                });
-        }
-        else if (filterType == '' && filterPriority == '' && filterStatus != '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[status][$eq]=${filterStatus}`)
-                .then((resp) => resp.json())
-                .then((apiData) => {
-                    console.log(apiData);
-                    setData(apiData.data);
-                });
-        }
-        else if (filterType != '' && filterPriority != '' && filterStatus == '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}&filters[priority][$eq]=${filterPriority}`)
-                .then((resp) => resp.json())
-                .then((apiData) => {
-                    console.log(apiData);
-                    setData(apiData.data);
-                });
-        }
-        else if (filterType != '' && filterPriority == '' && filterStatus != '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}&filters[status][$eq]=${filterStatus}`)
-                .then((resp) => resp.json())
-                .then((apiData) => {
-                    console.log(apiData);
-                    setData(apiData.data);
-                });
-        }
-        else if (filterType == '' && filterPriority != '' && filterStatus != '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[priority][$eq]=${filterPriority}&filters[status][$eq]=${filterStatus}`)
-                .then((resp) => resp.json())
-                .then((apiData) => {
-                    console.log(apiData);
-                    setData(apiData.data);
-                });
-        }
-        else {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}&filters[priority][$eq]=${filterPriority}&filters[status][$eq]=${filterStatus}`)
-                .then((resp) => resp.json())
-                .then((apiData) => {
-                    console.log(apiData);
-                    setData(apiData.data);
-                });
-        }
-    }
-
-    const clearFilter = () => {
-        setFilterType('');
-        setFilterPriority('');
-        setFilterStatus('');
-        toggleFilterRefresh();
-    }
-
-    const [filterRefresh, setFilterRefresh] = useState(false);
-
-    const toggleFilterRefresh = () => {
-        filterRefresh == true ? setFilterRefresh(false) : setFilterRefresh(true)
-    }
-
-    useEffect(() => {
-        filter();
-    }, [filterRefresh])
-
     return (
         <>
-            <Box display='flex' justifyContent='space-between' mt='-5px' px='17px' pb='7px' sx={{ borderBottom: 'solid', borderColor: 'darkgray', borderWidth: '1px' }}>
-                <Typography variant='h6' fontWeight='bold'>Tickets</Typography>
-                <Box display='flex' gap='10px' justifyContent='end' alignItems='end' mt='-15px' mb='10px'>
-                    <Typography>Filter by:</Typography>
-                    <FormControl size='small' variant='standard' >
-                        <InputLabel>Type</InputLabel>
-                        <Select
-                            label='Type'
-                            value={filterType}
-                            onChange={sortType}
-                            sx={{ width: '110px' }}
-                        >
-                            <MenuItem value='bug'>Bug</MenuItem>
-                            <MenuItem value='task'>Task</MenuItem>
-                            <MenuItem value='feature'>Feature</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                    <FormControl size='small' variant='standard'>
-                        <InputLabel>Priority</InputLabel>
-                        <Select
-                            label='Priority'
-                            value={filterPriority}
-                            onChange={sortPriority}
-                            sx={{ width: '110px' }}
-                        >
-                            <MenuItem value='highest'>Highest</MenuItem>
-                            <MenuItem value='high'>High</MenuItem>
-                            <MenuItem value='medium'>Medium</MenuItem>
-                            <MenuItem value='low'>Low</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                    <FormControl size='small' variant='standard'>
-                        <InputLabel>Status</InputLabel>
-                        <Select
-                            label='Status'
-                            value={filterStatus}
-                            onChange={sortStatus}
-                            sx={{ width: '110px' }}
-                        >
-                            <MenuItem value='backlog'>Backlog</MenuItem>
-                            <MenuItem value='todo'>Todo</MenuItem>
-                            <MenuItem value='in progress'>In Progress</MenuItem>
-                            <MenuItem value='pr'>PR</MenuItem>
-                            <MenuItem value='pr done'>PR Done</MenuItem>
-                            <MenuItem value='done'>Done</MenuItem>
-                            <MenuItem value='tested'>Tested</MenuItem>
-                            <MenuItem value='passed'>Passed</MenuItem>
-                            <MenuItem value='redo'>Redo</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                    <Box display='flex' gap='5px'>
-                        <Button variant='contained' size='small' color='info' onClick={filter}>Apply</Button>
-                        <Button variant='contained' size='small' color='error' onClick={clearFilter}>Clear</Button>
-                    </Box>
-                </Box >
-            </Box>
-
+            <Filter />
             <Box sx={{ bgcolor: 'white', height: '91%', width: '100%' }}>
                 <DataGrid
                     rows={tickets}
-                    rowHeight={75}
                     columns={columns}
+                    rowHeight={50}
                     initialState={{
                         pagination: {
                             paginationModel: {
-                                pageSize: 10,
+                                pageSize: 20,
                             },
                         },
                     }}
-                    pageSizeOptions={[10]}
+                    pageSizeOptions={[20]}
                     disableColumnMenu
                     sx={{
                         border: 'none',
@@ -579,12 +398,6 @@ const TicketsTable = () => {
                             value={comment}
                         />
                     </Box>
-                </DialogContent>
-            </Dialog>
-
-            <Dialog open={imageOpen} onClose={handleImageClose} maxWidth='md'>
-                <DialogContent sx={{ padding: '0px' }}>
-                    <img src={`http://localhost:1337${imageToOpen}`} key={imageToOpen} alt='' width='100%' height='100%' />
                 </DialogContent>
             </Dialog>
         </>

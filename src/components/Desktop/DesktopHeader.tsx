@@ -7,8 +7,26 @@ import Toolbar from '@mui/material/Toolbar';
 import logo from '../../assets/images/sciever_logo.png';
 import { Typography, styled } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
+import { MeiliSearch } from 'meilisearch';
+import { useState } from 'react';
 
 const DesktopHeader = () => {
+
+  const [searchResults, setSearchResults] = useState<any>([]);
+
+  const client = new MeiliSearch({
+    host: 'http://localhost:7700/'
+  })
+
+  const searchTickets = async (e: any) => {
+    client
+      .index('ticket')
+      .search(e.target.value)
+      .then((results) => {
+        console.log(results);
+        // setSearchResults(results.hits);
+      })
+  }
 
   const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -92,7 +110,7 @@ const DesktopHeader = () => {
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
-          <StyledInputBase placeholder='Search…' inputProps={{ 'aria-label': 'search' }} />
+          <StyledInputBase placeholder='Search…' inputProps={{ 'aria-label': 'search' }} onChange={(e) => searchTickets(e)} />
         </Search>
 
         <Box sx={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '85px', gap: '5px', cursor: 'pointer' }}>

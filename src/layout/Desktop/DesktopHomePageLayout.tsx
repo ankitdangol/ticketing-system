@@ -12,8 +12,8 @@ const DesktopHomePageLayout = () => {
                 <OverviewHeader />
                 <StatusBlock />
                 <Stack direction="row" mt='20px' justifyContent='space-between' gap='20px'>
-                    <TicketsContainer type='Recently added' />
-                    <TicketsContainer type='In progress' />
+                    <TicketsContainer type='Recently Added' />
+                    <TicketsContainer type='In Progress' />
                     <TicketsContainer type='Passed' />
                 </Stack>
             </Box>

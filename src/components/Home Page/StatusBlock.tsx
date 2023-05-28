@@ -82,8 +82,8 @@ const StatusBlock = () => {
                 }}
                 key={blockColor.name}
               >
-                <Typography fontWeight='bold' fontSize='23px'>{number}</Typography>
-                <Typography fontSize='12px'>{blockColor.name.toUpperCase()}</Typography>
+                <Typography fontWeight='bold' color='white' fontSize='23px'>{number}</Typography>
+                <Typography color='white' fontSize='12px'>{blockColor.name.toUpperCase()}</Typography>
               </Box>
             );
           })
@@ -110,8 +110,8 @@ const StatusBlock = () => {
                   }}
                   key={blockColor.name}
                 >
-                  <Typography fontWeight='bold' fontSize='30px'>{number}</Typography>
-                  <Typography fontWeight='bold' fontSize='13px'>{blockColor.name.toUpperCase()}</Typography>
+                  <Typography fontWeight='bold' color='white' fontSize='30px'>{number}</Typography>
+                  <Typography fontWeight='bold' color='white' fontSize='13px'>{blockColor.name.toUpperCase()}</Typography>
                 </Box>
               );
             })

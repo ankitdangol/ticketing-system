@@ -4,6 +4,7 @@ import TicketForum from '../TicketForum';
 import { Box, Typography, Dialog, DialogContent } from '@mui/material';
 import Pills from '../Pills';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ViewAttachments from './ViewAttachments';
 
 const DesktopTicketForum = (props: any) => {
     const data = props.data;
@@ -50,8 +51,11 @@ const DesktopTicketForum = (props: any) => {
     const getUrl = (selectedTicket: any) => {
         return selectedTicket.attributes.url;
     }
+    const getImages = (selectedTicket: any) => {
+        return `http://localhost:1337${selectedTicket.attributes.url}`;
+    }
 
-    // console.log(selectedTicket);
+    const images = selectedTicket[0]?.attributes?.attachment?.data?.length > 0 ? selectedTicket[0].attributes.attachment.data.map(getImages) : ''
     const url = selectedTicket[0]?.attributes?.attachment?.data?.length > 0 ? selectedTicket[0].attributes.attachment.data.map(getUrl) : 'undefined'
     const type = data?.length > 0 ? selectedTicket.map(getType) : 'undefined';
     const priority = data?.length > 0 ? selectedTicket.map(getPriority) : 'undefined';
@@ -60,21 +64,6 @@ const DesktopTicketForum = (props: any) => {
     const createdOn = data?.length > 0 ? selectedTicket.map(getCreatedOn) : 'undefined';
     const creator = data?.length > 0 ? selectedTicket.map(getCreator) : 'undefined';
     const description = data?.length > 0 ? selectedTicket.map(getDescription) : 'undefined';
-
-    const [imageOpen, setImageOpen] = useState(false);
-    const [imageToOpen, setImageToOpen] = useState('');
-
-    const handleImageOpen = () => {
-        setImageOpen(true);
-    };
-
-    const handleImageClose = () => {
-        setImageOpen(false);
-    };
-
-    const handleImageToOpen = (imageUrl: string) => {
-        setImageToOpen(imageUrl)
-    }
 
     return (
         <>
@@ -120,15 +109,9 @@ const DesktopTicketForum = (props: any) => {
                                 </Box>
                             </Box>
 
-                            <Box display='flex' gap='10px' mt='10px'>
+                            <Box mt='5px'>
                                 {url != 'undefined' ?
-                                    url.map((imageUrl: string) => {
-                                        return (
-                                            <>
-                                                <img src={`http://localhost:1337${imageUrl}`} key={url} alt='' width='45%' height='45%' onClick={() => { handleImageOpen(); handleImageToOpen(imageUrl) }} />
-                                            </>
-                                        )
-                                    })
+                                    <ViewAttachments url={url} images={images} />
                                     :
                                     ''
                                 }
@@ -140,11 +123,11 @@ const DesktopTicketForum = (props: any) => {
                 </Box>
             </Dialog >
 
-            <Dialog open={imageOpen} onClose={handleImageClose} maxWidth='md'>
+            {/* <Dialog open={imageOpen} onClose={handleImageClose} maxWidth='md'>
                 <DialogContent sx={{ padding: '0px' }}>
                     <img src={`http://localhost:1337${imageToOpen}`} key={imageToOpen} alt='' width='100%' height='100%' />
                 </DialogContent>
-            </Dialog>
+            </Dialog> */}
 
         </>
     )

@@ -13,8 +13,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DeleteTicket from '../DeleteTicket';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
-import image1 from '../../assets/images/sciever_logo.png';
-import image2 from '../../assets/images/screenshot.png';
 
 const TicketsAccordion = (props: any) => {
     const data = props.data;
@@ -103,7 +101,7 @@ const TicketsAccordion = (props: any) => {
                         </Box>
                         <Dialog open={imageOpen} onClose={handleImageClose}>
                             {images?.length > 0 ?
-                                <Carousel>
+                                <Carousel dynamicHeight>
                                     {images.map((image: string) => {
                                         return < img src={image} key={image} />
                                     })}
