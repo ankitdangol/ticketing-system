@@ -27,7 +27,7 @@ const ViewAttachments = (props: any) => {
                 <Typography color='#3751FF' fontSize='14px'>View {props.url.length} attachment(s)</Typography>
             </Box>
 
-            <Dialog open={imageOpen} onClose={handleImageClose} >
+            <Dialog open={imageOpen} onClose={handleImageClose}>
                 {imageToOpen != null ?
                     <Carousel dynamicHeight showThumbs={false} >
                         {imageToOpen.map((image: string) => {

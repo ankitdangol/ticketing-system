@@ -6,7 +6,7 @@ const MobileHeader = () => {
 
     return (
         <>
-            <Box role="heading" position='fixed' sx={{ backgroundColor: theme.palette.background.default, width: '100%', height:'81px', top: '0px', left: '0px' }}>
+            <Box role="heading" position='fixed' zIndex='2' sx={{ backgroundColor: theme.palette.background.default, width: '100%', height: '81px', top: '0px', left: '0px' }}>
                 <Toolbar sx={{ position: 'sticky' }}>
                     <ImageList
                         sx={{

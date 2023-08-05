@@ -2,13 +2,15 @@ import { Box, Stack, Typography } from '@mui/material';
 import isMobile from '../../hooks/isMobile';
 import OverviewHeader from './OverviewHeader';
 import { useState, useEffect } from 'react';
+import { token } from '../../config/constants';
 
 const StatusBlock = () => {
 
   const [data, setData] = useState<any>();
 
   useEffect(() => {
-    fetch('http://localhost:1337/api/tickets?fields=status')
+    const headers = { 'Authorization': `Bearer ${token}` };
+    fetch('http://localhost:1337/api/tickets?fields=status', { headers })
       .then((resp) => resp.json())
       .then((apiData) => {
         setData(apiData.data);
@@ -92,7 +94,7 @@ const StatusBlock = () => {
         :
         <Box display='flex' flexDirection='column'>
           <OverviewHeader />
-          <Box display='flex' flexWrap='wrap' gap='10px' mx='15px' mt='121px' zIndex='1'>
+          <Box display='flex' flexWrap='wrap' gap='10px' mx='15px' mt='126px' zIndex='1'>
             {blockColor?.map((blockColor) => {
               const number = numberOfTickets(blockColor)
               return (

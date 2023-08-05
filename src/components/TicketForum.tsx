@@ -1,9 +1,9 @@
-import { Box, InputAdornment, TextField } from "@mui/material";
+import { Box, InputAdornment, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import MessageBox from "./MessageBox";
-import { useEffect, useState } from "react";
-import isMobile from "../hooks/isMobile";
-
+import MessageBox from './MessageBox';
+import { useEffect, useState } from 'react';
+import isMobile from '../hooks/isMobile';
+import { token } from '../config/constants';
 
 const TicketForum = (props: any) => {
     const [refresh, setRefresh] = useState(true);
@@ -11,7 +11,8 @@ const TicketForum = (props: any) => {
     const [data, setData] = useState<any>(props.data);
 
     useEffect(() => {
-        fetch('http://localhost:1337/api/tickets?populate=*')
+        const headers = { 'Authorization': `Bearer ${token}` };
+        fetch('http://localhost:1337/api/tickets?populate=*', { headers })
             .then((resp) => resp.json())
             .then((apiData) => {
                 setData(apiData.data);
@@ -30,7 +31,6 @@ const TicketForum = (props: any) => {
 
         // console.log(ticket);
 
-        const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjgyNTAyNjE4LCJleHAiOjE2ODUwOTQ2MTh9.OKobUkpcVJrHAhLt48L7T3Fz537kS3Da3DM8aBdr0TQ'
         const messageInfo = {
             message: message,
             ticket: ticket
@@ -39,7 +39,7 @@ const TicketForum = (props: any) => {
         const add = await fetch('http://localhost:1337/api/chats', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${jwt}`,
+                'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
@@ -88,8 +88,8 @@ const TicketForum = (props: any) => {
         <>
             {
                 !mobile ?
-                    <Box height='500px' width='700px' p='15px' border='solid' borderColor='lightgray' borderRadius='5px' overflow='scroll' sx={{ borderWidth: '1px' }} >
-                        <Box mb='15px'>
+                    <Box height='500px' width='700px' border='solid' borderColor='lightgray' borderRadius='5px' position='relative' sx={{ borderWidth: '1px', overflowY: 'scroll' }} >
+                        <Box mb='15px' position='sticky' top='0px' bgcolor='white' zIndex='1' p='15px'>
                             <TextField id="outlined-basic" placeholder="Reply..." variant="outlined" fullWidth
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end"><SendIcon onClick={createMessage} sx={{ cursor: 'pointer' }} /></InputAdornment>,
@@ -104,16 +104,19 @@ const TicketForum = (props: any) => {
                                 value={message}
                             />
                         </Box>
-                        {selectedTicket?.length > 0 ? reversedMessages.map((message: string) => {
-                            // console.log(message);
-                            return (
-                                <MessageBox key={generateRandom()} message={message} />
-                            )
-                        }) : 'undefined'}
-                    </Box>
+
+                        <Box px='15px' pb='15px' mt='-20px'>
+                            {selectedTicket?.length > 0 ? reversedMessages.map((message: string) => {
+                                // console.log(message);
+                                return (
+                                    <MessageBox key={generateRandom()} message={message} />
+                                )
+                            }) : 'undefined'}
+                        </Box>
+                    </Box >
                     :
-                    <Box height='500px' p='15px' border='solid' borderColor='lightgray' borderRadius='5px' overflow='scroll' sx={{ borderWidth: '1px' }} >
-                        <Box mb='15px'>
+                    <Box height='500px' border='solid' borderColor='lightgray' borderRadius='5px' position='relative' sx={{ borderWidth: '1px', overflowY: 'scroll' }} >
+                        <Box position='sticky' top='0px' mb='15px' zIndex='1' bgcolor='white' p='15px'>
                             <TextField id="outlined-basic" placeholder="Reply..." variant="outlined" fullWidth
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end"><SendIcon onClick={createMessage} sx={{ cursor: 'pointer' }} /></InputAdornment>,
@@ -128,12 +131,15 @@ const TicketForum = (props: any) => {
                                 value={message}
                             />
                         </Box>
-                        {selectedTicket?.length > 0 ? reversedMessages.map((message: string) => {
-                            return (
-                                <MessageBox key={generateRandom()} message={message} />
-                            )
-                        }) : 'undefined'}
-                    </Box>
+
+                        <Box p='15px' mt='-40px'>
+                            {selectedTicket?.length > 0 ? reversedMessages.map((message: string) => {
+                                return (
+                                    <MessageBox key={generateRandom()} message={message} />
+                                )
+                            }) : 'undefined'}
+                        </Box>
+                    </Box >
             }
         </>
     )

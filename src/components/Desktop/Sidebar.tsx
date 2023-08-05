@@ -10,8 +10,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { RefreshContext } from '../../App';
 import axios from 'axios';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import DesktopNotifications from './DesktopNotifications';
+import { token } from '../../config/constants';
 
-const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjgyNTAyNjE4LCJleHAiOjE2ODUwOTQ2MTh9.OKobUkpcVJrHAhLt48L7T3Fz537kS3Da3DM8aBdr0TQ'
+const headers = { 'Authorization': `Bearer ${token}` };
 
 const Sidebar = () => {
   const location = useLocation();
@@ -67,7 +69,9 @@ const Sidebar = () => {
       formData.append('field', "attachment");
     })
 
-    axios.post("http://localhost:1337/api/upload", formData)
+    axios.post("http://localhost:1337/api/upload", formData, {
+      headers: headers
+    })
       .then((response) => {
         const attachments: any = []
         response.data.map((imageId: any) => {
@@ -103,7 +107,10 @@ const Sidebar = () => {
   }
 
   const createTicketService = async (ticketInfo: any) => {
-    axios.post("http://localhost:1337/api/tickets", ticketInfo)
+
+    axios.post("http://localhost:1337/api/tickets", ticketInfo, {
+      headers: headers
+    })
       .then((response) => {
         const idInfo = {
           ticket_id: 'ticket' + response.data.data.id
@@ -123,7 +130,7 @@ const Sidebar = () => {
     const add = await fetch(`http://localhost:1337/api/chats`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${jwt}`,
+        'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
@@ -137,7 +144,7 @@ const Sidebar = () => {
     const add = await fetch(`http://localhost:1337/api/tickets/${id}`, {
       method: 'PUT',
       headers: {
-        'Authorization': `Bearer ${jwt}`,
+        'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
@@ -172,6 +179,7 @@ const Sidebar = () => {
             </ListItemButton>
           </ListItem>
         </NavLink>
+
         <NavLink to='/tickets'>
           <ListItem disablePadding>
             <ListItemButton selected={location.pathname === '/tickets' ? true : false}>
@@ -179,12 +187,13 @@ const Sidebar = () => {
             </ListItemButton>
           </ListItem>
         </NavLink>
+
         <Button onClick={handleClickOpen} sx={{ width: '68px', borderRadius: '0px' }}>
           <AddCircleIcon sx={{ width: '35px', height: '35px', mx: 'auto', mb: 1, color: 'black' }} />
         </Button>
-        <Button onClick={handleClick} sx={{ width: '68px', borderRadius: '0px' }}>
-          <NotificationsIcon sx={{ width: '35px', height: '35px', mx: 'auto', mb: 1, color: 'black' }} />
-        </Button>
+
+        <DesktopNotifications />
+        
       </Box>
 
       <Dialog open={open} onClose={handleClose} fullWidth>

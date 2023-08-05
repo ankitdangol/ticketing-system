@@ -1,10 +1,12 @@
-import { Box, IconButton, styled, ListItemButton } from '@mui/material';
+import { Box, IconButton, styled, ListItemButton, Dialog, Typography, Button } from '@mui/material';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { sisUrl } from '../../config/constants';
 
 const NavItem = styled(Box)({
     flexGrow: 1,
@@ -18,6 +20,23 @@ const IconSize = {
 };
 
 const BottomNavbar = () => {
+    const navigate = useNavigate();
+
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('access_token');
+        navigate(window.location.href = sisUrl);
+    }
+
     return (
 
         <Box alignContent='center' justifyItems='center' display='flex' flexDirection='row' role='navigation' position='fixed' bgcolor='white' sx={{ top: 'auto', left: '0px', bottom: '0px', width: '100%' }}>
@@ -61,13 +80,26 @@ const BottomNavbar = () => {
                 </NavLink>
             </NavItem>
 
-            <NavItem>
+            <NavItem onClick={handleClickOpen}>
                 <IconButton color='primary' sx={{ px: '0px', py: '0px' }}>
                     <ListItemButton sx={{ py: '10px' }}>
                         <LogoutIcon sx={IconSize} />
                     </ListItemButton>
                 </IconButton>
             </NavItem>
+
+            <Dialog open={open} onClose={handleClose} maxWidth='sm'>
+                <Box display='flex' flexDirection='column' gap='10px' p='15px' alignItems='center'>
+                    <Box display='flex' gap='3px' pr='2px'>
+                        <LogoutIcon />
+                        <Typography>Are you sure?</Typography>
+                    </Box>
+                    <Box display='flex' gap='10px'>
+                        <Button size='small' variant='contained' color='error' onClick={handleLogout}>Yes</Button>
+                        <Button size='small' variant='outlined' onClick={handleClose}>No</Button>
+                    </Box>
+                </Box>
+            </Dialog >
         </Box >
     )
 }

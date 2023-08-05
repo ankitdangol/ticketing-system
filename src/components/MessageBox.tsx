@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import moment from "moment";
+import moment from 'moment';
 
 const MessageBox = (props: any) => {
 
@@ -17,14 +17,14 @@ const MessageBox = (props: any) => {
 
     return (
         <>
-            <Box display='flex' p='5px' borderBottom='solid' borderColor='lightgray' sx={{ borderWidth: '1px' }}>
-                <Box display='flex' flex={5} flexDirection='column' gap='10px'>
-                    <Typography fontWeight='bold'>{sender}</Typography>
-                    <Typography>{message}</Typography>
+            <Box display='flex' p='10px' borderBottom='solid' borderColor='lightgray' position='relative' sx={{ borderWidth: '1px' }}>
+                <Box display='flex' width='85%' flexDirection='column' gap='10px'>
+                    <Typography fontWeight='bold'>Sender name</Typography>
+                    <Typography sx={{ wordBreak: 'break-word' }}>{message}</Typography>
                 </Box>
-                <Box flex={1} flexDirection='column' textAlign='end'>
-                    <Typography>{time}</Typography>
-                    <Typography>{date}</Typography>
+                <Box display='flex' flexDirection='column' textAlign='end' position='absolute' bottom='10px' right='0px'>
+                    <Typography fontSize='12px'>{time}</Typography>
+                    <Typography fontSize='12px'>{date}</Typography>
                 </Box>
             </Box>
 

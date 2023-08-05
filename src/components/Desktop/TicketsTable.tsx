@@ -1,11 +1,7 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Pills from '../Pills';
 import TableIcons from './TableIcons';
-import { Box, Typography, Dialog, DialogContent, InputAdornment, Button, Stack, TextField, Select, MenuItem, SelectChangeEvent, InputLabel, FormControl } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { Box, Typography, Dialog, DialogContent, InputAdornment, Button, Stack, TextField } from '@mui/material';
 import { useState, useContext } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
@@ -13,12 +9,20 @@ import Filter from '../Filter';
 import { DataContext } from '../../pages/TicketsPage';
 import { RefreshContext } from '../../App';
 import ViewAttachments from './ViewAttachments';
+import ImportExportIcon from '@mui/icons-material/ImportExport';
+import { token } from '../../config/constants';
+import DueDatePicker from './DueDatePicker';
+import { UserDataContext } from '../../routes/Main';
 
 const TicketsTable = () => {
 
     const { data, setData } = useContext(DataContext);
 
     const { refresh, setRefresh } = useContext(RefreshContext);
+
+    const { userData, setUserData } = useContext(UserDataContext);
+
+    // console.log(userData);
 
     const toggleRefresh = () => {
         refresh == true ? setRefresh(false) : setRefresh(true)
@@ -32,7 +36,7 @@ const TicketsTable = () => {
         return ticket.attributes.url;
     }
 
-    const tickets = data?.length > 0 ? data.map(getTickets) : 'undefined';
+    const tickets = data?.length > 0 ? data.map(getTickets) : '';
 
     const [open, setOpen] = useState(false);
 
@@ -107,7 +111,6 @@ const TicketsTable = () => {
     const [comment, setComment] = useState('');
 
     const handleStatusChange = async () => {
-        const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjgyNTAyNjE4LCJleHAiOjE2ODUwOTQ2MTh9.OKobUkpcVJrHAhLt48L7T3Fz537kS3Da3DM8aBdr0TQ'
 
         const ticketInfo = {
             status: status.toLowerCase()
@@ -121,7 +124,7 @@ const TicketsTable = () => {
         const changeStatus = await fetch(`http://localhost:1337/api/tickets/${statusToChange}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${jwt}`,
+                'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
@@ -131,7 +134,7 @@ const TicketsTable = () => {
         const addComment = await fetch('http://localhost:1337/api/chats', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${jwt}`,
+                'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
@@ -154,21 +157,27 @@ const TicketsTable = () => {
 
     }
 
-    function generateRowId() {
-        const length = 8,
-            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        let retVal = "";
-        for (let i = 0, n = charset.length; i < length; ++i) {
-            retVal += charset.charAt(Math.floor(Math.random() * n));
-        }
-        return retVal;
-    }
-
     const columns: GridColDef[] = [
+        {
+            field: 'sn',
+            renderHeader: () => {
+                return <Typography fontWeight='bold'>SN</Typography>
+            },
+            headerAlign: 'center',
+            align: 'center',
+            width: 50,
+            sortable: false,
+            renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.row.ticket_id) + 1,
+        },
         {
             field: 'ticket_id',
             renderHeader: () => {
-                return <Typography fontWeight='bold'>Ticket ID</Typography>
+                return (
+                    <Box display='flex' alignItems='center'>
+                        <Typography fontWeight='bold'>Ticket ID</Typography>
+                        <ImportExportIcon />
+                    </Box>
+                )
             },
             headerAlign: 'center',
             width: 100,
@@ -182,7 +191,7 @@ const TicketsTable = () => {
                     <Typography fontWeight='bold'>Description</Typography>
                 )
             },
-            width: 380,
+            width: 330,
             editable: false,
             sortable: false
         },
@@ -276,7 +285,12 @@ const TicketsTable = () => {
         {
             field: 'due_date',
             renderHeader: () => {
-                return <Typography fontWeight='bold'>Due Date</Typography>
+                return (
+                    <Box display='flex' alignItems='center'>
+                        <Typography fontWeight='bold'>Due Date</Typography>
+                        <ImportExportIcon />
+                    </Box>
+                )
             },
             headerAlign: 'center',
             align: 'center',
@@ -290,9 +304,7 @@ const TicketsTable = () => {
                 }
                 else {
                     return (
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker />
-                        </LocalizationProvider>
+                        <DueDatePicker selectedRowId={row.row.ticket_id} />
                     )
                 }
             }
@@ -321,11 +333,11 @@ const TicketsTable = () => {
                     initialState={{
                         pagination: {
                             paginationModel: {
-                                pageSize: 20,
+                                pageSize: 10,
                             },
                         },
                     }}
-                    pageSizeOptions={[20]}
+                    pageSizeOptions={[10, 15, 20, 25, 30]}
                     disableColumnMenu
                     sx={{
                         border: 'none',
@@ -349,7 +361,7 @@ const TicketsTable = () => {
                             borderWidth: '1px'
                         }
                     }}
-                    getRowId={() => generateRowId()}
+                    getRowId={row => row.ticket_id}
                     disableRowSelectionOnClick
                 />
             </Box>

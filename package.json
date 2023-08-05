@@ -10,6 +10,7 @@
     "@mui/material": "^5.11.10",
     "@mui/x-data-grid": "^6.4.0",
     "@mui/x-date-pickers": "^6.4.0",
+    "@novu/notification-center": "^0.17.1",
     "@refinedev/strapi-v4": "^4.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

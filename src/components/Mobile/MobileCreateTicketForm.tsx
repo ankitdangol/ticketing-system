@@ -4,8 +4,9 @@ import AttachmentIcon from '@mui/icons-material/Attachment';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { token } from '../../config/constants';
 
-const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjgyNTAyNjE4LCJleHAiOjE2ODUwOTQ2MTh9.OKobUkpcVJrHAhLt48L7T3Fz537kS3Da3DM8aBdr0TQ'
+const headers = { 'Authorization': `Bearer ${token}` };
 
 const MobileCreateTicketForm = () => {
 
@@ -44,7 +45,9 @@ const MobileCreateTicketForm = () => {
             formData.append('field', "attachment");
         })
 
-        axios.post("http://localhost:1337/api/upload", formData)
+        axios.post("http://localhost:1337/api/upload", formData, {
+            headers: headers
+        })
             .then((response) => {
                 const attachments: any = []
                 response.data.map((imageId: any) => {
@@ -79,7 +82,9 @@ const MobileCreateTicketForm = () => {
     }
 
     const createTicketService = async (ticketInfo: any) => {
-        axios.post("http://localhost:1337/api/tickets", ticketInfo)
+        axios.post("http://localhost:1337/api/tickets", ticketInfo, {
+            headers: headers
+        })
             .then((response) => {
                 const idInfo = {
                     ticket_id: 'ticket' + response.data.data.id
@@ -99,7 +104,7 @@ const MobileCreateTicketForm = () => {
         const add = await fetch(`http://localhost:1337/api/chats`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${jwt}`,
+                'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
@@ -113,7 +118,7 @@ const MobileCreateTicketForm = () => {
         const add = await fetch(`http://localhost:1337/api/tickets/${id}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${jwt}`,
+                'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },

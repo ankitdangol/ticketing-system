@@ -7,10 +7,16 @@ import { useTheme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import TicketForum from '../TicketForum';
 import Pills from '../Pills';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import isMobile from '../../hooks/isMobile';
+import { token } from '../../config/constants';
+import ViewAttachments from '../Desktop/ViewAttachments';
+import DueDatePicker from '../Desktop/DueDatePicker';
+import { RefreshContext } from '../../App';
 
 const OverviewTicket = (props: any) => {
+  const { refresh, setRefresh } = useContext(RefreshContext);
+
   const iconSize = {
     width: '20px',
     height: '20px'
@@ -21,7 +27,8 @@ const OverviewTicket = (props: any) => {
   const [data, setData] = useState()
 
   useEffect(() => {
-    fetch('http://localhost:1337/api/tickets?populate=*')
+    const headers = { 'Authorization': `Bearer ${token}` };
+    fetch('http://localhost:1337/api/tickets?populate=*', { headers })
       .then((resp) => resp.json())
       .then((apiData) => {
         setData(apiData.data);
@@ -63,9 +70,15 @@ const OverviewTicket = (props: any) => {
     setImageToOpen(imageUrl)
   }
 
+  const getImages = (selectedTicket: any) => {
+    return `http://localhost:1337${selectedTicket.attributes.url}`;
+  }
+
   const getUrl = (selectedTicket: any) => {
     return selectedTicket.attributes.url;
   }
+
+  const images = props.data?.attributes?.attachment?.data?.length > 0 ? props.data?.attributes.attachment.data.map(getImages) : ''
 
   const url = props.data?.attributes?.attachment?.data?.length > 0 ? props.data.attributes.attachment.data.map(getUrl) : 'undefined'
 
@@ -124,7 +137,7 @@ const OverviewTicket = (props: any) => {
 
                 <Box display='flex' gap='25px'>
                   <Typography width='85px'>Due Date</Typography>
-                  <Typography>{props.data.attributes.due_date != null ? new Date(props.data.attributes.due_date).toLocaleDateString('en-GB') : ''}</Typography>
+                  <Typography>{props.data.attributes.due_date != null ? new Date(props.data.attributes.due_date).toLocaleDateString('en-GB') : <DueDatePicker selectedRowId={props.data.attributes.ticket_id} />}</Typography>
                 </Box>
 
                 <Box display='flex' gap='25px'>
@@ -135,13 +148,7 @@ const OverviewTicket = (props: any) => {
 
               <Box display='flex' gap='10px' mt='10px'>
                 {url != 'undefined' ?
-                  url.map((imageUrl: string) => {
-                    return (
-                      <>
-                        <img src={`http://localhost:1337${imageUrl}`} key={url} alt='' width='45%' height='55%' onClick={() => { handleImageOpen(); handleImageToOpen(imageUrl) }} />
-                      </>
-                    )
-                  })
+                  <ViewAttachments url={url} images={images} />
                   :
                   ''
                 }
@@ -155,7 +162,7 @@ const OverviewTicket = (props: any) => {
 
       <Dialog open={imageOpen} onClose={handleImageClose} maxWidth='md'>
         <DialogContent sx={{ padding: '0px' }}>
-          <img src={`http://localhost:1337${imageToOpen}`} key={imageToOpen} alt='' width='100%' height='100%' />
+          <img src={`http://localhost:1337${imageToOpen}`} alt='' width='100%' height='100%' />
         </DialogContent>
       </Dialog>
 

@@ -3,13 +3,14 @@ import OverviewTicket from './OverviewTicket';
 import { useContext, useEffect, useState } from 'react';
 import isMobile from '../../hooks/isMobile';
 import { useNavigate } from 'react-router-dom';
-import { FilterContext, RefreshContext } from '../../App';
+import { TicketsContext, RefreshContext } from '../../App';
+import { token } from '../../config/constants';
 
 const TicketsContainer = (props: any) => {
 
   const [data, setData] = useState<any>();
 
-  const { homePageFilter, setHomePageFilter } = useContext(FilterContext);
+  const { tickets, setTickets } = useContext(TicketsContext);
 
   const { refresh, setRefresh } = useContext(RefreshContext);
 
@@ -18,28 +19,29 @@ const TicketsContainer = (props: any) => {
   }
 
   useEffect(() => {
+    const headers = { 'Authorization': `Bearer ${token}` };
     if (props.type == 'Recently Added') {
-      fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&pagination%5Blimit%5D=3`)
+      fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&pagination%5Blimit%5D=3`, { headers })
         .then((resp) => resp.json())
         .then((apiData) => {
           setData(apiData.data);
         });
     }
     else if (props.type == 'In Progress') {
-      fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[status][$eq]=in progress&pagination%5Blimit%5D=3`)
+      fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[status][$eq]=in progress&pagination%5Blimit%5D=3`, { headers })
         .then((resp) => resp.json())
         .then((apiData) => {
           setData(apiData.data);
         });
     }
-    else {
-      fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[status][$eq]=passed&pagination%5Blimit%5D=3`)
+    else if (props.type == 'Passed') {
+      fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[status][$eq]=passed&pagination%5Blimit%5D=3`, { headers })
         .then((resp) => resp.json())
         .then((apiData) => {
           setData(apiData.data);
         });
     }
-  }, [])
+  }, [refresh])
 
   const navigate = useNavigate();
 
@@ -48,12 +50,12 @@ const TicketsContainer = (props: any) => {
       navigate('/tickets');
     }
     else if (props.type == 'In Progress') {
-      setHomePageFilter('In Progress');
+      setTickets('In Progress');
       toggleRefresh();
       navigate('/tickets');
     }
     else {
-      setHomePageFilter('Passed');
+      setTickets('Passed');
       toggleRefresh();
       navigate('/tickets');
     }
@@ -83,7 +85,7 @@ const TicketsContainer = (props: any) => {
           </Box>
           {data?.length > 0 ?
             data.map((individualData: any) => {
-              return <OverviewTicket data={individualData} key={individualData.ticket_id} />
+              return <OverviewTicket data={individualData} key={individualData.attributes.ticket_id} />
             })
             :
             ''
@@ -109,7 +111,7 @@ const TicketsContainer = (props: any) => {
           </Box>
           {data?.length > 0 ?
             data.map((individualData: any) => {
-              return <OverviewTicket data={individualData} key={individualData.ticket_id} />
+              return <OverviewTicket data={individualData} key={individualData.attributes.ticket_id} />
             })
             :
             ''

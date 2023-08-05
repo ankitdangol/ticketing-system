@@ -3,6 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import { useState, useContext } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { RefreshContext } from '../App';
+import { token } from '../config/constants';
 
 const DeleteTicket = (props: any) => {
     const { refresh, setRefresh } = useContext(RefreshContext);
@@ -29,12 +30,10 @@ const DeleteTicket = (props: any) => {
 
     const deleteTicket = async (id: any) => {
 
-        const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjgyNTAyNjE4LCJleHAiOjE2ODUwOTQ2MTh9.OKobUkpcVJrHAhLt48L7T3Fz537kS3Da3DM8aBdr0TQ'
-
         const remove = await fetch(`http://localhost:1337/api/tickets/${idToDelete}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${jwt}`,
+                'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }

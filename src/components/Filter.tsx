@@ -4,6 +4,7 @@ import { DataContext } from '../pages/TicketsPage';
 import isMobile from '../hooks/isMobile';
 import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
+import { token } from '../config/constants';
 
 const Filter = () => {
     const { data, setData } = useContext(DataContext);
@@ -27,57 +28,59 @@ const Filter = () => {
     };
 
     const filter = () => {
+        const headers = { 'Authorization': `Bearer ${token}` };
+
         if (filterType == '' && filterPriority == '' && filterStatus == '') {
-            fetch('http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc')
+            fetch('http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc', { headers })
                 .then((resp) => resp.json())
                 .then((apiData) => {
                     setData(apiData.data);
                 });
         }
         else if (filterType != '' && filterPriority == '' && filterStatus == '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}`)
+            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}`, { headers })
                 .then((resp) => resp.json())
                 .then((apiData) => {
                     setData(apiData.data);
                 });
         }
         else if (filterType == '' && filterPriority != '' && filterStatus == '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[priority][$eq]=${filterPriority}`)
+            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[priority][$eq]=${filterPriority}`, { headers })
                 .then((resp) => resp.json())
                 .then((apiData) => {
                     setData(apiData.data);
                 });
         }
         else if (filterType == '' && filterPriority == '' && filterStatus != '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[status][$eq]=${filterStatus}`)
+            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[status][$eq]=${filterStatus}`, { headers })
                 .then((resp) => resp.json())
                 .then((apiData) => {
                     setData(apiData.data);
                 });
         }
         else if (filterType != '' && filterPriority != '' && filterStatus == '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}&filters[priority][$eq]=${filterPriority}`)
+            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}&filters[priority][$eq]=${filterPriority}`, { headers })
                 .then((resp) => resp.json())
                 .then((apiData) => {
                     setData(apiData.data);
                 });
         }
         else if (filterType != '' && filterPriority == '' && filterStatus != '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}&filters[status][$eq]=${filterStatus}`)
+            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}&filters[status][$eq]=${filterStatus}`, { headers })
                 .then((resp) => resp.json())
                 .then((apiData) => {
                     setData(apiData.data);
                 });
         }
         else if (filterType == '' && filterPriority != '' && filterStatus != '') {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[priority][$eq]=${filterPriority}&filters[status][$eq]=${filterStatus}`)
+            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[priority][$eq]=${filterPriority}&filters[status][$eq]=${filterStatus}`, { headers })
                 .then((resp) => resp.json())
                 .then((apiData) => {
                     setData(apiData.data);
                 });
         }
-        else {
-            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}&filters[priority][$eq]=${filterPriority}&filters[status][$eq]=${filterStatus}`)
+        else if (filterType != '' && filterPriority != '' && filterStatus != '') {
+            fetch(`http://localhost:1337/api/tickets?populate=*&sort=createdAt%3Adesc&filters[type][$eq]=${filterType}&filters[priority][$eq]=${filterPriority}&filters[status][$eq]=${filterStatus}`, { headers })
                 .then((resp) => resp.json())
                 .then((apiData) => {
                     setData(apiData.data);
@@ -108,7 +111,7 @@ const Filter = () => {
         <>
             {mobile ?
                 <>
-                    <Box display='flex' gap='10px' alignItems='center' justifyContent='space-between'>
+                    <Box display='flex' gap='10px' alignItems='center' justifyContent='space-between' width='100%'>
                         <Box display='flex' >
                             <FormControl size='small' sx={{
                                 ml: '-10px',

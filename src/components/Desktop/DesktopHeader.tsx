@@ -8,24 +8,38 @@ import logo from '../../assets/images/sciever_logo.png';
 import { Typography, styled } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { MeiliSearch } from 'meilisearch';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { useNavigate, createSearchParams } from 'react-router-dom';
+import { TicketsContext, RefreshContext } from '../../App';
+import { sisUrl } from '../../config/constants';
+import Dialog from '@mui/material/Dialog/Dialog';
+import Button from '@mui/material/Button/Button';
 
 const DesktopHeader = () => {
 
-  const [searchResults, setSearchResults] = useState<any>([]);
+  const { tickets, setTickets } = useContext(TicketsContext);
+
+  const { refresh, setRefresh } = useContext(RefreshContext);
+
+  const toggleRefresh = () => {
+    refresh == true ? setRefresh(false) : setRefresh(true);
+  }
+
+  const navigate = useNavigate();
 
   const client = new MeiliSearch({
     host: 'http://localhost:7700/'
   })
 
-  const searchTickets = async (e: any) => {
-    client
-      .index('ticket')
-      .search(e.target.value)
-      .then((results) => {
-        console.log(results);
-        // setSearchResults(results.hits);
-      })
+  const navigateToTable = (value: string) => {
+    navigate({
+      pathname: '/tickets',
+      search: createSearchParams({
+        data: value
+      }).toString()
+    });
+    setTickets('search')
+    toggleRefresh();
   }
 
   const Search = styled('div')(({ theme }) => ({
@@ -74,10 +88,25 @@ const DesktopHeader = () => {
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('md')]: {
-        width: '20ch',
+        width: '340px',
       },
     },
   }));
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    navigate(window.location.href = sisUrl);
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -110,14 +139,37 @@ const DesktopHeader = () => {
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
-          <StyledInputBase placeholder='Search…' inputProps={{ 'aria-label': 'search' }} onChange={(e) => searchTickets(e)} />
+          <StyledInputBase placeholder='Search…' inputProps={{ 'aria-label': 'search' }}
+            onKeyDown={(e) => {
+              const element = e.currentTarget as HTMLInputElement
+              const value = element.value
+              if (e.key === 'Enter') {
+                navigateToTable(value);
+                // searchTickets(value);
+                e.preventDefault();
+              }
+            }}
+          />
         </Search>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '85px', gap: '5px', cursor: 'pointer' }}>
+        <Box onClick={handleClickOpen} sx={{ display: 'flex', alignItems: 'center', position: 'absolute', right: '85px', gap: '5px', cursor: 'pointer' }}>
           <Typography fontSize='17px'>Logout</Typography>
           <LogoutIcon />
         </Box>
       </Toolbar>
+
+      <Dialog open={open} onClose={handleClose} maxWidth='sm'>
+        <Box display='flex' flexDirection='column' gap='10px' p='15px' alignItems='center'>
+          <Box display='flex' gap='3px' pr='2px'>
+            <LogoutIcon />
+            <Typography>Are you sure?</Typography>
+          </Box>
+          <Box display='flex' gap='10px'>
+            <Button size='small' variant='contained' color='error' onClick={handleLogout}>Yes</Button>
+            <Button size='small' variant='outlined' onClick={handleClose}>No</Button>
+          </Box>
+        </Box>
+      </Dialog >
     </Box >
   );
 };

@@ -14,7 +14,7 @@ const OverviewHeader = () => {
   return (
     <>
       {mobile ? (
-        <Box sx={{ backgroundColor: theme.palette.background.default, display: 'flex', justifyContent: 'space-between', position: 'fixed', left: '15px', right: '15px', mt: '80px', pb: '10px' }}>
+        <Box sx={{ backgroundColor: theme.palette.background.default, display: 'flex', justifyContent: 'space-between', position: 'fixed', left: '15px', right: '15px', mt: '80px', pb: '10px', pt:'5px' }}>
           <Typography fontWeight='bold' flex={1}>Overview</Typography>
           <Box display='flex' gap='1px' flex={1} justifyContent='center' mt='7px'>
             <NavLink to='/'>
