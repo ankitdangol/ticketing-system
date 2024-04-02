@@ -126,9 +126,9 @@ const Filter = () => {
                                     mt: '2px'
                                 }
                             }} >
-                                <InputLabel>Type</InputLabel>
+                                <InputLabel>Types</InputLabel>
                                 <Select
-                                    label='Type'
+                                    label='Types'
                                     value={filterType}
                                     onChange={sortType}
                                     sx={{
