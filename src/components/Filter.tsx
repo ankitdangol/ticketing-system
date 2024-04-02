@@ -153,7 +153,7 @@ const Filter = () => {
                                     mt: '2px'
                                 }
                             }} >
-                                <InputLabel>Priority</InputLabel>
+                                <InputLabel>Prioritys</InputLabel>
                                 <Select
                                     label='Priority'
                                     value={filterPriority}
