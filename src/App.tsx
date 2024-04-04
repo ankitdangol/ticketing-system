@@ -9,6 +9,7 @@ export const RefreshContext = createContext<any>({})
 export const TicketsContext = createContext<any>({})
 
 export default function App() {
+  console.log('hello')
 
   const [refresh, setRefresh] = useState(true);
 
